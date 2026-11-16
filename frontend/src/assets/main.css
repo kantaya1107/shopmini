@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Google_san';
+  src: url('@/assets/fonts/Google_Sans/GoogleSans_17pt-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'MMM';
+  src: url('@/assets/fonts/Mitr/Mitr-SemiBold.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* กำหนด Design Token ของ ShopMini (Tailwind v4 ตั้งค่าใน CSS ได้เลย ไม่ต้องมี tailwind.config.js) */
+@theme {
+  --color-brand-50: #f0fdfa;
+  --color-brand-100: #ccfbf1;
+  --color-brand-600: #0d9488;
+  --color-brand-700: #0f766e;
+  --font-sans: "MMM", ui-sans-serif, system-ui, sans-serif;
+}

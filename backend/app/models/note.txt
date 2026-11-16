@@ -1,0 +1,6 @@
+จุดออกแบบ	เหตุผล
+TYPE_CHECKING + ชื่อ Class เป็น String "Product"	ป้องกัน Circular Import ระหว่างไฟล์ Model ที่อ้างถึงกัน
+ondelete="RESTRICT" ที่ category_id	ห้ามลบหมวดหมู่ที่ยังมีสินค้า
+ondelete="CASCADE" ที่ order_items.order_id + cascade="all, delete-orphan"	ลบคำสั่งซื้อแล้วรายการย่อยหายตาม
+lazy="joined", innerjoin=True ที่ Product.category	ดึงหมวดหมู่มาพร้อมสินค้าใน Query เดียว ป้องกันปัญหา N+1 (ดึงสินค้า 12 ชิ้นแล้วต้องยิง Query หาหมวดหมู่อีก 12 ครั้ง)
+server_default	ค่าเริ่มต้นระดับฐานข้อมูล ใช้ได้แม้เพิ่มข้อมูลด้วย SQL ตรง

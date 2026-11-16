@@ -1,0 +1,31 @@
+วิธีรัน api fastAPI 
+python -m fastapi dev app/main.py
+
+เช็คต่อ DB
+python -c "from sqlalchemy import text; from app.core.database import engine; conn = engine.connect(); print('Connected:', conn.execute(text('SELECT 1')).scalar()); conn.close()"
+
+ตัิดตั้งแพ็คเกจ python ด้วยไฟล์ requirements.txt
+pip install -r requirements.txt
+
+เริ่มต้นการใช้งาน alembic (ตัวหลังสุดคือตั้งชื่อโฟลเดอร์)
+alembic init alembic
+
+สร้าง Migration จาก Model อัตโนมัติ แล้วนำไปใช้กับฐานข้อมูล:
+alembic revision --autogenerate -m "create shopmini tables"
+alembic upgrade head
+alembic current
+ผลลัพธ์จริง (ย่อ):
+INFO  [alembic.autogenerate.compare.tables] Detected added table 'categories'
+INFO  [alembic.autogenerate.compare.constraints] Detected added index 'ix_categories_slug' on '('slug',)'
+INFO  [alembic.autogenerate.compare.tables] Detected added table 'users'
+INFO  [alembic.autogenerate.compare.tables] Detected added table 'orders'
+INFO  [alembic.autogenerate.compare.tables] Detected added table 'products'
+INFO  [alembic.autogenerate.compare.tables] Detected added table 'order_items'
+Generating .../alembic/versions/05590bfb6c69_create_shopmini_tables.py ...  done
+INFO  [alembic.runtime.migration] Running upgrade  -> 05590bfb6c69, create shopmini tables
+05590bfb6c69 (head)
+
+
+
+# สร้าง SECRET_KEY แบบสุ่ม 64 ตัวอักษร
+python -c "import secrets; print(secrets.token_hex(32))"

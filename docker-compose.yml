@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:18
+    container_name: shopmini-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-shopmini}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-shopmini_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-shopmini}
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    container_name: shopmini-api
+    environment:
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-shopmini}:${POSTGRES_PASSWORD:-shopmini_pass}@db:5432/${POSTGRES_DB:-shopmini}
+      SECRET_KEY: ${SECRET_KEY:?Please set SECRET_KEY in .env}
+      CORS_ORIGINS: '["http://localhost:8080"]'
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: /api
+    container_name: shopmini-web
+    ports:
+      - "8080:80"
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+
+#คำสั่งรัน docker compose up -d
+#ดูการเชื่อมต่อฐาน DB docker compose ps
+#เช็คการติดต่อฐาน DB docker exec -it shopmini-db psql -U shopmini -d shopmini -c "SELECT version();"

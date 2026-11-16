@@ -1,0 +1,22 @@
+# Node / Vite
+node_modules/
+dist/
+coverage/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ความลับ: ห้าม Commit ไฟล์ .env เด็ดขาด (Commit เฉพาะ .env.example)
+.env
+.env.local
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
